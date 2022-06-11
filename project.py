@@ -1,3 +1,4 @@
+from tkinter import messagebox
 import cv2
 import pytesseract
 import imutils
@@ -27,6 +28,8 @@ def select_photo():
         img=imutils.resize(img,width=500)
         text_img=img.copy()
         translate_img=img.copy()
+        sentences_list.clear()
+        translated_list.clear()
 def ocr_image():
     try:
         data=pytesseract.image_to_data(img)
@@ -35,7 +38,7 @@ def ocr_image():
                     a=a.split()
                     if(len(a)==12):
                         x,y,w,h=int(a[6]),int(a[7]),int(a[8]),int(a[9])
-                        cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),2)
+                        cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),1)
         cv2.imshow('Image To OCR',img)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
@@ -45,11 +48,10 @@ def image2text():
     try:
         config=r'-l eng+tur --oem 3 --psm 6'
         text = pytesseract.image_to_string(text_img,config=config)
-        print(text)
         if len(sentences_list)==0:
             sentences_list.append(text)
+            messagebox.showinfo("Target Text", f"{sentences_list[0]}")
             print("Sentences added to list")
-
     except:
         print("No image selected")
 def text2translate():
@@ -66,12 +68,9 @@ def text2translate():
             except:
                 print("Error")
         if len(translated_list)>0:
-            print("Translated all sentences")
-            # file=open("translated.txt","w")
-            # file.write(str(translated_list))
-            # file.close()
-            for sentence in translated_list:
-                print(sentence)
+            messagebox.showinfo("Translated Text", f"{translated_list[0]}")
+            sentences_list.clear()
+            translated_list.clear()
 root=Tk()
 root.title('Image to Translate')
 root.geometry('300x400')
