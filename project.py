@@ -1,3 +1,4 @@
+#181805014 - Melih Çelik - Text and Translation Project
 from tkinter import messagebox
 import cv2
 import pytesseract
@@ -9,6 +10,7 @@ from translate import Translator
 
 sentences_list = []
 translated_list = []
+#Take photo and save photo on directory
 def take_photo():
     cap = cv2.VideoCapture(0)
     while True:
@@ -20,16 +22,18 @@ def take_photo():
                 break
     cap.release()
     cv2.destroyAllWindows()
+#Selecting the image
 def select_photo():
         global img,text_img,translate_img
         filepath = fd.askopenfilename(title='Select Image')
         print("Filepath: " + filepath)
         img = cv2.imread(filepath)
-        img=imutils.resize(img,width=500)
+        img=imutils.resize(img,width=600)
         text_img=img.copy()
         translate_img=img.copy()
         sentences_list.clear()
         translated_list.clear()
+#Optical Character Recognition and Showing the Image
 def ocr_image():
     try:
         data=pytesseract.image_to_data(img)
@@ -38,6 +42,7 @@ def ocr_image():
                     a=a.split()
                     if(len(a)==12):
                         x,y,w,h=int(a[6]),int(a[7]),int(a[8]),int(a[9])
+                        #Select text with rectangles
                         cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),1)
         cv2.imshow('Image To OCR',img)
         cv2.waitKey(0)
@@ -50,7 +55,8 @@ def image2text():
         text = pytesseract.image_to_string(text_img,config=config)
         if len(sentences_list)==0:
             sentences_list.append(text)
-            messagebox.showinfo("Target Text", f"{sentences_list[0]}")
+            #Printing the text with messagebox
+            messagebox.showinfo("Target Text", f"Text on Image : \n{sentences_list[0]}")
             print("Sentences added to list")
     except:
         print("No image selected")
@@ -58,6 +64,7 @@ def text2translate():
     if len(sentences_list) == 0:
         print("No text to translate")
     else:
+        #Translate the text with Translator library
         translator = Translator(to_lang="tr")
         for sentence in sentences_list:
             try:
@@ -68,9 +75,11 @@ def text2translate():
             except:
                 print("Error")
         if len(translated_list)>0:
-            messagebox.showinfo("Translated Text", f"{translated_list[0]}")
+            #Printing the translated text with messagebox
+            messagebox.showinfo("Translated Text", f"Text on Image : \n{translated_list[0]}")
             sentences_list.clear()
             translated_list.clear()
+#Tkinter menu and buttons
 root=Tk()
 root.title('Image to Translate')
 root.geometry('300x400')
