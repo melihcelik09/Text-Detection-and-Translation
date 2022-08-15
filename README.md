@@ -22,8 +22,7 @@ can be understood easily.
 
 
 ## Features
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://user-images.githubusercontent.com/68864968/184621756-37e2099c-25c0-4c01-8775-2c18705ef9bd.png)
 
 
 - [@melihcelik09](https://www.github.com/melihcelik09)
